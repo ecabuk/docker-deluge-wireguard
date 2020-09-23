@@ -46,9 +46,7 @@ RUN apt-get update && \
 RUN ln -s /var/lib/deluged "${DELUGE_CONFIG_DIR}"
 
 # Folders
-RUN mkdir -p \
-        ${DELUGE_CONFIG_DIR} \
-        ${DELUGE_DATA_DIR} && \
+RUN mkdir -p ${DELUGE_DATA_DIR} && \
     chown debian-deluged.debian-deluged \
         ${DELUGE_CONFIG_DIR} \
         ${DELUGE_DATA_DIR}

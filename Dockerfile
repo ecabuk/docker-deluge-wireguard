@@ -53,12 +53,11 @@ RUN mkdir -p \
         ${DELUGE_CONFIG_DIR} \
         ${DELUGE_DATA_DIR}
 
-# Utils
 COPY scripts/* /usr/local/bin/
-RUN chmod +x /usr/local/bin/set-deluge-config.py
-
-# Entrypoint
 COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /usr/local/bin/set-deluge-config.py /entrypoint.sh
+
 
 # Supervisord config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

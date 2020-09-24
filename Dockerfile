@@ -41,6 +41,8 @@ RUN apt-get update && \
         traceroute \
         vim && \
     rm -rf /var/lib/apt/lists/*
+    
+RUN useradd debian-deluged
 
 # Link default config dir to root
 RUN ln -s /var/lib/deluged "${DELUGE_CONFIG_DIR}"
@@ -55,7 +57,6 @@ COPY scripts/* /usr/local/bin/
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /usr/local/bin/set-deluge-config.py /entrypoint.sh
-
 
 # Supervisord config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf

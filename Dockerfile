@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG DELUGED_HOME=/var/lib/deluged
 
 # WEB UI
 EXPOSE 8112
@@ -15,6 +16,7 @@ ENV WG_I_NAME=wg0
 #ENV LOCAL_NETWORK=192.168.1.0/24
 ENV DELUGE_UMASK=022
 ENV DELUGE_WEB_UMASK=027
+
 
 # Locale
 ENV LANG=en_US.UTF-8
@@ -41,17 +43,19 @@ RUN apt-get update && \
         traceroute \
         vim && \
     rm -rf /var/lib/apt/lists/*
-    
-RUN useradd debian-deluged
+
+RUN useradd --home "${DELUGED_HOME}" debian-deluged
 
 # Link default config dir to root
 RUN ln -s /var/lib/deluged "${DELUGE_CONFIG_DIR}"
 
+RUN find / -iname core.conf
+
 # Folders
-RUN mkdir -p ${DELUGE_CONFIG_DIR} && \
-    chown debian-deluged.debian-deluged \
-        ${DELUGE_CONFIG_DIR} \
-        ${DELUGE_DATA_DIR}
+RUN mkdir -p "${DELUGE_DATA_DIR}" "${DELUGED_HOME}" && \
+    chown -R debian-deluged.debian-deluged \
+        "${DELUGE_DATA_DIR}" \
+        "${DELUGED_HOME}"
 
 COPY scripts/* /usr/local/bin/
 COPY entrypoint.sh /entrypoint.sh
